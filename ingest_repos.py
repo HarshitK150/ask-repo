@@ -8,6 +8,7 @@ load_dotenv()
 
 GITHUB_TOKEN = os.getenv("GITHUB_API_TOKEN")
 ALLOWED_EXTENSIONS = {".py", ".js", ".ts", ".tsx", ".jsx", ".md", ".yml", ".yaml"}
+SKIP_KEYWORDS = {"node_modules", "__pycache__", ".git", "dist/", "build/", "docs", "scripts", "test"}
 
 def get_repo_files(owner, repo, token=GITHUB_TOKEN):
     url = f"https://api.github.com/repos/{owner}/{repo}/zipball/HEAD"
@@ -29,7 +30,7 @@ def get_repo_files(owner, repo, token=GITHUB_TOKEN):
             if not any(clean_path.endswith(ext) for ext in ALLOWED_EXTENSIONS):
                 continue
             # skip common noise
-            if any(skip in clean_path for skip in ["node_modules", "__pycache__", ".git", "dist/", "build/"]):
+            if any(skip in clean_path for skip in SKIP_KEYWORDS):
                 continue
                 
             with z.open(name) as f:
