@@ -74,7 +74,7 @@ if __name__ == "__main__":
     for q in questions:
         print(f"\nQ: {q}")
 
-        result = chain.invoke(q)
+        result = chain.invoke({"question": q, "chat_history": []})
         print(f"A: {result.content}")
 
         docs = retriever.invoke(q)
