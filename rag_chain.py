@@ -1,8 +1,8 @@
-from dotenv import load_dotenv
+from operator import itemgetter
 
+from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
 
 load_dotenv()
 
@@ -14,6 +14,9 @@ Use the following context to answer the question.
 Always mention which file the information comes from.
 If you don't know the answer, say so — don't make things up.
 
+Chat History:
+{chat_history}
+                                                                      
 Context:
 {context}
 
@@ -41,8 +44,9 @@ def build_qa_chain(vectorstore):
     # LCEL pipeline
     chain = (
         {
-            "context": retriever | format_docs,
-            "question": RunnablePassthrough(),
+            "context": itemgetter("question") | retriever | format_docs,
+            "question": itemgetter("question"),
+            "chat_history": itemgetter("chat_history"),
         }
         | PROMPT
         | llm

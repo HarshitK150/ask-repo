@@ -1,4 +1,6 @@
 import streamlit as st
+from langchain_core.messages import HumanMessage, AIMessage
+
 from ingest_repos import get_repo_files
 from vector_store import build_vectorstore
 from rag_chain import build_qa_chain
@@ -55,7 +57,18 @@ else:
 
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                answer = st.session_state.chain.invoke(question)
+                # build history for the chain
+                history = []
+                for msg in st.session_state.messages[:-1]:  # exclude current question
+                    if msg["role"] == "user":
+                        history.append(HumanMessage(content=msg["content"]))
+                    else:
+                        history.append(AIMessage(content=msg["content"]))
+
+                answer = st.session_state.chain.invoke({
+                    "question": question,
+                    "chat_history": history
+                })
                 docs = st.session_state.retriever.invoke(question)
                 sources = list(set(d.metadata["source"] for d in docs))
 
