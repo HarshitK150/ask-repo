@@ -2,29 +2,25 @@ from operator import itemgetter
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 load_dotenv()
 
 # Prompt
-PROMPT = ChatPromptTemplate.from_template("""
+PROMPT = ChatPromptTemplate.from_messages([
+    ("system", """
 You are an expert code assistant helping developers understand a GitHub repository.
 
-Use the following context to answer the question.
+Use the provided context to answer the user's question.
 Always mention which file the information comes from.
 If you don't know the answer, say so — don't make things up.
-
-Chat History:
-{chat_history}
-                                                                      
+     
 Context:
 {context}
-
-Question:
-{question}
-
-Answer:
-""")
+"""),
+    MessagesPlaceholder("chat_history"),
+    ("human", "{question}"),
+])
 
 
 def build_qa_chain(vectorstore):
