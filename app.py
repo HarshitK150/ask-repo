@@ -5,8 +5,8 @@ from ingest_repos import get_repo_files
 from vector_store import build_vectorstore
 from rag_chain import build_qa_chain
 
-st.set_page_config(page_title="RepoChat", page_icon="💬")
-st.title("💬 RepoChat")
+st.set_page_config(page_title="AskRepo", page_icon="💬")
+st.title("💬 AskRepo")
 st.caption("Chat with any GitHub repository")
 
 # --- Sidebar: repo loader ---
