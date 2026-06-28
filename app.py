@@ -48,6 +48,10 @@ else:
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
+            if msg["role"] == "assistant" and msg.get("sources"):
+                with st.expander("📁 Sources"):
+                    for s in msg["sources"]:
+                        st.code(s)
 
     # chat input
     if question := st.chat_input("Ask anything about this repo..."):
@@ -77,4 +81,8 @@ else:
                 for s in sources:
                     st.code(s)
 
-        st.session_state.messages.append({"role": "assistant", "content": answer.content})
+        st.session_state.messages.append({
+            "role": "assistant", 
+            "content": answer.content,
+            "sources": sources,
+        })
