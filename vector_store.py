@@ -28,6 +28,7 @@ def build_vectorstore(files):
     return vectorstore
 
 
+# ------ test -------
 if __name__ == "__main__":
     from ingest_repos import get_repo_files
 
