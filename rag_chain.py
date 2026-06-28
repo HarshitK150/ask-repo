@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 
@@ -48,7 +48,7 @@ def build_qa_chain(vectorstore):
         | llm
     )
 
-    return chain
+    return chain, retriever
 
 
 # ------ test -------
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     vs = build_vectorstore(files)
 
     # Build chain
-    chain = build_qa_chain(vs)
+    chain, retriever = build_qa_chain(vs)
 
     questions = [
         "How does routing work?",
@@ -75,6 +75,8 @@ if __name__ == "__main__":
         print(f"\nQ: {q}")
 
         result = chain.invoke(q)
-
         print(f"A: {result.content}")
+
+        docs = retriever.invoke(q)
+        print("Sources:", [d.metadata["source"] for d in docs])
         print("---")
