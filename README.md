@@ -4,6 +4,8 @@ Chat with any GitHub repository. Understand codebases without manually reading t
 
 ## Demo
 
+🚀 **Live app: [ask-repo.streamlit.app](https://ask-repo.streamlit.app)**
+
 > Enter any public GitHub repo URL → Ask questions in natural language → Get answers with source references
 
 ## Problem
